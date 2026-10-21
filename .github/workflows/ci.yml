@@ -1,0 +1,29 @@
+# Tests, and the descriptor sets biject compiles the gRPC lock from stay current.
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+  descriptors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - run: npm run descriptors
+      # Byte-for-byte equality depends on the compiler; a change here means the committed
+      # sets may be stale, so regenerate and commit them.
+      - run: git diff --quiet build/ || echo "::warning::build/*.binpb differ from buf build; run npm run descriptors and commit" 

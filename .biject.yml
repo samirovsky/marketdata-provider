@@ -1,0 +1,29 @@
+# biject configuration for the Tickerline market data APIs: one service, three protocols,
+# one lock per protocol (api.lock.http.yaml, api.lock.graphql.yaml, api.lock.grpc.yaml).
+#
+# Every version lives side by side (openapi/v1.yaml, openapi/v2.yaml, ...) and the service
+# serves all of them. These entries name the *released* version: releasing v2 is the PR
+# that points them at the v2 files.
+apis:
+  - name: tickerline-marketdata
+    protocol: http
+    specs: [openapi/v1.yaml]
+    versioning: { style: path, path_template: "/{version}" }
+  - name: tickerline-marketdata
+    protocol: graphql
+    specs: [graphql/v1.graphql]
+    version: v1
+    versioning: { style: path, path_template: "/api/{version}/graphql" }
+    # A schema names no server: clients call this host.
+    servers: ["https://tickerline-api.fly.dev"]
+  - name: tickerline-marketdata
+    protocol: grpc
+    # Written by `npm run descriptors` (buf); the workflow checks it is current.
+    specs: [build/v1.binpb]
+    versioning: { style: package, package_segment: "v*" }
+    # Protobuf can't declare credentials: the metadata key that carries the API key.
+    metadata_auth: [{ key: x-tickerline-key }]
+    servers: ["https://tickerline-grpc.fly.dev"]
+gate: release
+release_tag: "v*"
+owners: ["@samirovsky"]

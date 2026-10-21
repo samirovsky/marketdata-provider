@@ -1,0 +1,204 @@
+lock: 1
+api: "tickerline-marketdata"
+protocol: "graphql"
+version: "v1"
+hash: "sha256:9617f301951ea97d6c0c248e80d26c2ffb5873dcbfdde5f022d5efa9ceb39fac"
+versioning:
+  path_template: "/api/{version}/graphql"
+  style: "path"
+source:
+  files:
+    - "graphql/v1.graphql"
+  generator: "file"
+  input_hashes:
+    "graphql/v1.graphql": "sha256:9c51df4ea23098742505d027a7b15b89f194d86e3bcb4becd872f86d9399f76c"
+servers:
+  - url: "https://tickerline-api.fly.dev"
+operations:
+  op_0482:
+    field: "Query.quote"
+    kind: "query"
+    params:
+      p_5437:
+        in: "argument"
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "String!"
+    returns: "s_5e89"
+    since: "v1"
+    type: "Quote"
+  op_3a01:
+    field: "Query.instrument"
+    kind: "query"
+    params:
+      p_b445:
+        in: "argument"
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "String!"
+    returns: "s_3f62"
+    since: "v1"
+    type: "Instrument"
+  op_3ea2:
+    field: "Query.candles"
+    kind: "query"
+    params:
+      p_0487:
+        default: 30
+        in: "argument"
+        name: "limit"
+        since: "v1"
+        type: "Int"
+      p_175e:
+        in: "argument"
+        name: "interval"
+        ref: "s_9c34"
+        required: true
+        since: "v1"
+        type: "Interval!"
+      p_fca3:
+        in: "argument"
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "String!"
+    returns: "s_1508"
+    since: "v1"
+    type: "[Candle!]!"
+  op_bca0:
+    field: "Query.instruments"
+    kind: "query"
+    returns: "s_3f62"
+    since: "v1"
+    type: "[Instrument!]!"
+schemas:
+  s_1508:
+    fields:
+      f_1f6e:
+        name: "l"
+        since: "v1"
+        type: "Float!"
+      f_35fc:
+        name: "h"
+        since: "v1"
+        type: "Float!"
+      f_7216:
+        name: "v"
+        since: "v1"
+        type: "Int!"
+      f_8e21:
+        name: "t"
+        since: "v1"
+        type: "String!"
+      f_ac00:
+        name: "c"
+        since: "v1"
+        type: "Float!"
+      f_bb12:
+        name: "o"
+        since: "v1"
+        type: "Float!"
+    kind: "object"
+    name: "Candle"
+    since: "v1"
+  s_238b:
+    kind: "enum"
+    name: "Currency"
+    since: "v1"
+    values:
+      v_477f:
+        name: "USD"
+        since: "v1"
+      v_bfbc:
+        name: "EUR"
+        since: "v1"
+  s_3f62:
+    fields:
+      f_3f18:
+        name: "currency"
+        ref: "s_238b"
+        since: "v1"
+        type: "Currency!"
+      f_b2ca:
+        name: "name"
+        since: "v1"
+        type: "String!"
+      f_d193:
+        name: "exchange"
+        ref: "s_af69"
+        since: "v1"
+        type: "Exchange!"
+      f_e730:
+        name: "symbol"
+        since: "v1"
+        type: "String!"
+    kind: "object"
+    name: "Instrument"
+    since: "v1"
+  s_5e89:
+    fields:
+      f_00fa:
+        name: "currency"
+        ref: "s_238b"
+        since: "v1"
+        type: "Currency!"
+      f_7736:
+        name: "symbol"
+        since: "v1"
+        type: "String!"
+      f_802f:
+        name: "price"
+        since: "v1"
+        type: "Float!"
+      f_bd83:
+        name: "timestamp"
+        since: "v1"
+        type: "String!"
+      f_d4bb:
+        name: "volume"
+        since: "v1"
+        type: "Int!"
+    kind: "object"
+    name: "Quote"
+    since: "v1"
+  s_9c34:
+    kind: "enum"
+    name: "Interval"
+    since: "v1"
+    values:
+      v_4c51:
+        name: "HOUR1"
+        since: "v1"
+      v_bb31:
+        name: "DAY1"
+        since: "v1"
+      v_e193:
+        name: "MIN1"
+        since: "v1"
+  s_af69:
+    kind: "enum"
+    name: "Exchange"
+    since: "v1"
+    values:
+      v_2a50:
+        name: "XTLN"
+        since: "v1"
+      v_7bff:
+        name: "XORB"
+        since: "v1"
+events: {}
+docs:
+  api:
+    description: "Tickerline market data, served at /api/v1/graphql."
+  f_802f:
+    description: "Last traded price, in major units of the currency."
+  op_0482:
+    description: "The latest quote of an instrument."
+  op_3a01:
+    description: "One instrument by symbol, or null."
+  op_3ea2:
+    description: "OHLCV candles, oldest first."
+  op_bca0:
+    description: "Every listed instrument."

@@ -1,0 +1,288 @@
+lock: 1
+api: "tickerline-marketdata"
+protocol: "grpc"
+version: "v1"
+hash: "sha256:52512c7905988c028bf1c1bc02ba238ddd321f45a9e9fb6194941522acec84d7"
+versioning:
+  package_segment: "v*"
+  style: "package"
+source:
+  files:
+    - "build/v1.binpb"
+  generator: "file"
+  input_hashes:
+    "build/v1.binpb": "sha256:aee07c67a510aa4f2d176682adb6ea89e3e2b26d4847f6147de59106232c461e"
+servers:
+  - url: "https://tickerline-grpc.fly.dev"
+auth:
+  a_6c1b:
+    in: "metadata"
+    kind: "metadata"
+    name: "x-tickerline-key"
+    scheme_name: "x-tickerline-key"
+operations:
+  op_09a1:
+    auth:
+      - a_6c1b: []
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    method: "StreamQuotes"
+    package: "tickerline.marketdata.v1"
+    request: "s_dd21"
+    response: "s_7d9f"
+    service: "tickerline.marketdata.v1.MarketData"
+    since: "v1"
+    streaming: "server"
+  op_2d69:
+    auth:
+      - a_6c1b: []
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    method: "GetQuote"
+    package: "tickerline.marketdata.v1"
+    request: "s_b855"
+    response: "s_7d9f"
+    service: "tickerline.marketdata.v1.MarketData"
+    since: "v1"
+    streaming: "unary"
+  op_b697:
+    auth:
+      - a_6c1b: []
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    method: "ListCandles"
+    package: "tickerline.marketdata.v1"
+    request: "s_185d"
+    response: "s_8855"
+    service: "tickerline.marketdata.v1.MarketData"
+    since: "v1"
+    streaming: "unary"
+schemas:
+  s_185d:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_3ec9:
+        name: "limit"
+        number: 3
+        presence: "implicit"
+        since: "v1"
+        type: "int32"
+      f_948c:
+        name: "symbol"
+        number: 1
+        presence: "implicit"
+        since: "v1"
+        type: "string"
+      f_faf5:
+        name: "interval"
+        number: 2
+        presence: "implicit"
+        ref: "s_68bb"
+        since: "v1"
+        type: "tickerline.marketdata.v1.Interval"
+    kind: "message"
+    name: "tickerline.marketdata.v1.ListCandlesRequest"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+  s_68bb:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    kind: "enum"
+    name: "tickerline.marketdata.v1.Interval"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+    values:
+      v_4733:
+        name: "INTERVAL_1D"
+        number: 3
+        since: "v1"
+      v_7234:
+        name: "INTERVAL_UNSPECIFIED"
+        number: 0
+        since: "v1"
+      v_a33d:
+        name: "INTERVAL_1M"
+        number: 1
+        since: "v1"
+      v_f069:
+        name: "INTERVAL_1H"
+        number: 2
+        since: "v1"
+  s_7d9f:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_324a:
+        name: "symbol"
+        number: 1
+        presence: "implicit"
+        since: "v1"
+        type: "string"
+      f_3677:
+        name: "volume"
+        number: 4
+        presence: "implicit"
+        since: "v1"
+        type: "int32"
+      f_90c2:
+        name: "currency"
+        number: 3
+        presence: "implicit"
+        since: "v1"
+        type: "string"
+      f_c55d:
+        name: "timestamp"
+        number: 5
+        presence: "explicit"
+        since: "v1"
+        type: "google.protobuf.Timestamp"
+      f_dc22:
+        name: "price"
+        number: 2
+        presence: "implicit"
+        since: "v1"
+        type: "double"
+    kind: "message"
+    name: "tickerline.marketdata.v1.Quote"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+  s_8855:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_0a7f:
+        cardinality: "list"
+        name: "candles"
+        number: 1
+        ref: "s_8c9e"
+        since: "v1"
+        type: "tickerline.marketdata.v1.Candle"
+    kind: "message"
+    name: "tickerline.marketdata.v1.ListCandlesResponse"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+  s_8c9e:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_78c3:
+        name: "o"
+        number: 2
+        presence: "implicit"
+        since: "v1"
+        type: "double"
+      f_8193:
+        name: "l"
+        number: 4
+        presence: "implicit"
+        since: "v1"
+        type: "double"
+      f_9843:
+        name: "c"
+        number: 5
+        presence: "implicit"
+        since: "v1"
+        type: "double"
+      f_aaf8:
+        name: "t"
+        number: 1
+        presence: "explicit"
+        since: "v1"
+        type: "google.protobuf.Timestamp"
+      f_e259:
+        name: "h"
+        number: 3
+        presence: "implicit"
+        since: "v1"
+        type: "double"
+      f_e780:
+        name: "v"
+        number: 6
+        presence: "implicit"
+        since: "v1"
+        type: "int64"
+    kind: "message"
+    name: "tickerline.marketdata.v1.Candle"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+  s_b855:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_325d:
+        name: "symbol"
+        number: 1
+        presence: "implicit"
+        since: "v1"
+        type: "string"
+    kind: "message"
+    name: "tickerline.marketdata.v1.GetQuoteRequest"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+  s_dd21:
+    codegen:
+      file: "tickerline/marketdata/v1/marketdata.proto"
+      go_package: "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v1;marketdatav1"
+      java_multiple_files: "true"
+      java_package: "com.tickerline.marketdata.v1"
+      syntax: "proto3"
+    fields:
+      f_22f9:
+        cardinality: "list"
+        name: "symbols"
+        number: 1
+        since: "v1"
+        type: "string"
+    kind: "message"
+    name: "tickerline.marketdata.v1.StreamQuotesRequest"
+    package: "tickerline.marketdata.v1"
+    since: "v1"
+events: {}
+docs:
+  f_3677:
+    description: "Shares traded today."
+  f_dc22:
+    description: "Last traded price, in major units of the currency."
+  op_09a1:
+    description: "A quote every few seconds until the client cancels."
+  op_2d69:
+    description: "The latest quote of an instrument."
+  op_b697:
+    description: "OHLCV candles, oldest first."

@@ -1,0 +1,69 @@
+// api.lock options for Protocol Buffers (api.lock spec section 13.3), companion file of
+// the biject reference implementation.
+//
+// Import this file and mark renames, sunsets, replacements and facts in your .proto
+// sources. Extension names are unique within a package, so only method options use the
+// plain names; the other elements use the same numbers under a prefixed name:
+//
+//   rpc TextSearch(TextSearchRequest) returns (TextSearchResponse) {
+//     option (api_lock.renamed_from) = "mapgrid.places.v1.PlacesService.SearchText";
+//   }
+//   message Place {
+//     option (api_lock.message_sunset) = "2027-06-30";
+//     option (api_lock.message_replacement) = "mapgrid.places.v2.Venue";
+//     string price = 4 [(api_lock.field_fact) = '{"kind":"unit","value":"currency_major"}'];
+//   }
+//
+// Facts are JSON objects with the fields of api.lock spec section 9.
+syntax = "proto3";
+
+package api_lock;
+
+import "google/protobuf/descriptor.proto";
+
+option java_package = "dev.biject.apilock";
+option java_outer_classname = "ApiLockProto";
+option java_multiple_files = true;
+option go_package = "github.com/samirovsky/biject/proto/apilock;apilock";
+
+extend google.protobuf.MethodOptions {
+  string renamed_from = 51001;
+  string sunset = 51002;
+  string replacement = 51003;
+  repeated string fact = 51004;
+}
+
+extend google.protobuf.ServiceOptions {
+  string service_renamed_from = 51001;
+  string service_sunset = 51002;
+  string service_replacement = 51003;
+  repeated string service_fact = 51004;
+}
+
+extend google.protobuf.MessageOptions {
+  string message_renamed_from = 51001;
+  string message_sunset = 51002;
+  string message_replacement = 51003;
+  repeated string message_fact = 51004;
+}
+
+extend google.protobuf.FieldOptions {
+  string field_renamed_from = 51001;
+  string field_sunset = 51002;
+  string field_replacement = 51003;
+  repeated string field_fact = 51004;
+}
+
+extend google.protobuf.EnumOptions {
+  string enum_renamed_from = 51001;
+  string enum_sunset = 51002;
+  string enum_replacement = 51003;
+  repeated string enum_fact = 51004;
+}
+
+extend google.protobuf.EnumValueOptions {
+  string value_renamed_from = 51001;
+  string value_sunset = 51002;
+  string value_replacement = 51003;
+  repeated string value_fact = 51004;
+}

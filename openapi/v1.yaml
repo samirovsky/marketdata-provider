@@ -1,0 +1,83 @@
+openapi: 3.1.0
+info:
+  title: Tickerline Market Data
+  version: v1
+  description: Quotes, candles and instruments for Tickerline-listed securities.
+servers:
+  - url: https://tickerline-api.fly.dev/v1
+security:
+  - apiKey: []
+paths:
+  /instruments:
+    get:
+      operationId: listInstruments
+      summary: Every listed instrument.
+      responses:
+        "200":
+          description: The instruments
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Instrument" }
+  /quotes/{symbol}:
+    get:
+      operationId: getQuote
+      summary: The latest quote of an instrument.
+      parameters:
+        - { name: symbol, in: path, required: true, schema: { type: string, example: TLX } }
+      responses:
+        "200":
+          description: The quote
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Quote" }
+        "404":
+          description: Unknown symbol
+  /candles/{symbol}:
+    get:
+      operationId: listCandles
+      summary: OHLCV candles, oldest first.
+      parameters:
+        - { name: symbol, in: path, required: true, schema: { type: string, example: TLX } }
+        - { name: interval, in: query, required: true, schema: { type: string, enum: ["1m", "1h", "1d"] } }
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 500, default: 30 } }
+      responses:
+        "200":
+          description: The candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Candle" }
+components:
+  securitySchemes:
+    apiKey: { type: apiKey, in: header, name: X-Tickerline-Key }
+  schemas:
+    Instrument:
+      type: object
+      required: [symbol, name, exchange, currency]
+      properties:
+        symbol: { type: string, example: TLX }
+        name: { type: string }
+        exchange: { type: string, enum: [XTLN, XORB] }
+        currency: { type: string, enum: [USD, EUR] }
+    Quote:
+      type: object
+      required: [symbol, price, currency, volume, timestamp]
+      properties:
+        symbol: { type: string, example: TLX }
+        price: { type: number, description: Last traded price, in major units of the currency. }
+        currency: { type: string, enum: [USD, EUR] }
+        volume: { type: integer, description: Shares traded today. }
+        timestamp: { type: string, format: date-time }
+    Candle:
+      type: object
+      required: [t, o, h, l, c, v]
+      properties:
+        t: { type: string, format: date-time }
+        o: { type: number }
+        h: { type: number }
+        l: { type: number }
+        c: { type: number }
+        v: { type: integer }

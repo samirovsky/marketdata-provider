@@ -1,0 +1,64 @@
+directive @apiLockRenamedFrom(coordinate: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | INTERFACE | UNION | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+"Tickerline market data, served at /api/v2/graphql."
+schema {
+  query: Query
+}
+
+type Query {
+  "Every listed instrument."
+  instruments: [Instrument!]!
+  "One instrument by symbol, or null."
+  instrument(symbol: String!): Instrument
+  "The latest quote of an instrument."
+  quote(symbol: String!): Quote
+  "OHLCV candles, oldest first."
+  candles(symbol: String!, interval: Interval!, count: Int = 30 @apiLockRenamedFrom(coordinate: "Query.candles(limit:)")): [Candle!]!
+}
+
+type Instrument {
+  symbol: String!
+  name: String!
+  exchange: Exchange!
+  currency: Currency!
+}
+
+type Quote {
+  symbol: String!
+  "Last traded price, with its currency."
+  last: Money!
+  volume: Int!
+  timestamp: String!
+}
+
+type Money {
+  "The decimal amount, in major units of the currency."
+  amount: Float!
+  currency: Currency!
+}
+
+type Candle {
+  t: String!
+  o: Float!
+  h: Float!
+  l: Float!
+  c: Float!
+  v: Int!
+}
+
+enum Interval {
+  MINUTE1 @apiLockRenamedFrom(coordinate: "Interval.MIN1")
+  HOUR1
+  DAY1
+  WEEK1
+}
+
+enum Exchange {
+  XTLN
+  XORB
+}
+
+enum Currency {
+  USD
+  EUR
+}

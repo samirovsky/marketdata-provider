@@ -1,0 +1,25 @@
+# REST (/v1, /v2) and GraphQL (/api/v1/graphql, /api/v2/graphql): https://tickerline-api.fly.dev
+app = "tickerline-api"
+primary_region = "cdg"
+
+[build]
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/healthz"
+    interval = "30s"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

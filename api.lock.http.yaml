@@ -1,0 +1,260 @@
+lock: 1
+api: "tickerline-marketdata"
+protocol: "http"
+version: "v1"
+hash: "sha256:3a95bfc9b9cebb34c76e32d15c51d92053aa2f87fd26c404fdb15ade7cb47018"
+versioning:
+  path_template: "/{version}"
+  style: "path"
+source:
+  files:
+    - "openapi/v1.yaml"
+  generator: "file"
+  input_hashes:
+    "openapi/v1.yaml": "sha256:13cecbbe9f5d19be33aac8e659a53b33e22146c5991c558839186e4ebb2e9adb"
+servers:
+  - url: "https://tickerline-api.fly.dev/v1"
+auth:
+  a_bef9:
+    in: "header"
+    kind: "api_key"
+    name: "X-Tickerline-Key"
+    scheme_name: "apiKey"
+operations:
+  op_3d1d:
+    auth:
+      - a_bef9: []
+    method: "GET"
+    params:
+      p_585e:
+        in: "path"
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "string"
+    path: "/quotes/{symbol}"
+    responses:
+      "200":
+        id: "r_80a1"
+        media_types:
+          - "application/json"
+        shape:
+          ref: "s_5e89"
+          type: "object"
+        since: "v1"
+      "404":
+        id: "r_4dd3"
+        since: "v1"
+    since: "v1"
+  op_7782:
+    auth:
+      - a_bef9: []
+    method: "GET"
+    params:
+      p_2052:
+        in: "query"
+        name: "interval"
+        required: true
+        since: "v1"
+        type: "string"
+        values:
+          v_4f90:
+            name: "1d"
+            since: "v1"
+          v_a2b1:
+            name: "1m"
+            since: "v1"
+          v_a493:
+            name: "1h"
+            since: "v1"
+      p_8fcc:
+        in: "path"
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "string"
+      p_9f15:
+        in: "query"
+        maximum: 500
+        minimum: 1
+        name: "limit"
+        since: "v1"
+        type: "integer"
+    path: "/candles/{symbol}"
+    responses:
+      "200":
+        id: "r_a8a8"
+        media_types:
+          - "application/json"
+        shape:
+          items:
+            ref: "s_1508"
+            type: "object"
+          type: "array"
+        since: "v1"
+    since: "v1"
+  op_f4b8:
+    auth:
+      - a_bef9: []
+    method: "GET"
+    path: "/instruments"
+    responses:
+      "200":
+        id: "r_9ec6"
+        media_types:
+          - "application/json"
+        shape:
+          items:
+            ref: "s_3f62"
+            type: "object"
+          type: "array"
+        since: "v1"
+    since: "v1"
+schemas:
+  s_1508:
+    fields:
+      f_1f6e:
+        name: "l"
+        required: true
+        since: "v1"
+        type: "number"
+      f_35fc:
+        name: "h"
+        required: true
+        since: "v1"
+        type: "number"
+      f_7216:
+        name: "v"
+        required: true
+        since: "v1"
+        type: "integer"
+      f_8e21:
+        format: "date-time"
+        name: "t"
+        required: true
+        since: "v1"
+        type: "string"
+      f_ac00:
+        name: "c"
+        required: true
+        since: "v1"
+        type: "number"
+      f_bb12:
+        name: "o"
+        required: true
+        since: "v1"
+        type: "number"
+    kind: "object"
+    name: "Candle"
+    since: "v1"
+  s_3f62:
+    fields:
+      f_3f18:
+        name: "currency"
+        required: true
+        since: "v1"
+        type: "string"
+        values:
+          v_3048:
+            name: "EUR"
+            since: "v1"
+          v_c67e:
+            name: "USD"
+            since: "v1"
+      f_b2ca:
+        name: "name"
+        required: true
+        since: "v1"
+        type: "string"
+      f_d193:
+        name: "exchange"
+        required: true
+        since: "v1"
+        type: "string"
+        values:
+          v_34dc:
+            name: "XORB"
+            since: "v1"
+          v_5f37:
+            name: "XTLN"
+            since: "v1"
+      f_e730:
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "string"
+    kind: "object"
+    name: "Instrument"
+    since: "v1"
+  s_5e89:
+    fields:
+      f_00fa:
+        name: "currency"
+        required: true
+        since: "v1"
+        type: "string"
+        values:
+          v_188b:
+            name: "EUR"
+            since: "v1"
+          v_4ae1:
+            name: "USD"
+            since: "v1"
+      f_7736:
+        name: "symbol"
+        required: true
+        since: "v1"
+        type: "string"
+      f_802f:
+        name: "price"
+        required: true
+        since: "v1"
+        type: "number"
+      f_bd83:
+        format: "date-time"
+        name: "timestamp"
+        required: true
+        since: "v1"
+        type: "string"
+      f_d4bb:
+        name: "volume"
+        required: true
+        since: "v1"
+        type: "integer"
+    kind: "object"
+    name: "Quote"
+    since: "v1"
+events: {}
+docs:
+  api:
+    description: "Quotes, candles and instruments for Tickerline-listed securities."
+    extensions:
+      title: "Tickerline Market Data"
+  f_7736:
+    example: "TLX"
+  f_802f:
+    description: "Last traded price"
+  f_d4bb:
+    description: "Shares traded today."
+  f_e730:
+    example: "TLX"
+  op_3d1d:
+    extensions:
+      operationId: "getQuote"
+    summary: "The latest quote of an instrument."
+  op_7782:
+    extensions:
+      operationId: "listCandles"
+    summary: "OHLCV candles, oldest first."
+  op_f4b8:
+    extensions:
+      operationId: "listInstruments"
+    summary: "Every listed instrument."
+  r_4dd3:
+    description: "Unknown symbol"
+  r_80a1:
+    description: "The quote"
+  r_9ec6:
+    description: "The instruments"
+  r_a8a8:
+    description: "The candles"

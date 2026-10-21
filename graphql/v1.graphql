@@ -1,0 +1,56 @@
+"Tickerline market data, served at /api/v1/graphql."
+schema {
+  query: Query
+}
+
+type Query {
+  "Every listed instrument."
+  instruments: [Instrument!]!
+  "One instrument by symbol, or null."
+  instrument(symbol: String!): Instrument
+  "The latest quote of an instrument."
+  quote(symbol: String!): Quote
+  "OHLCV candles, oldest first."
+  candles(symbol: String!, interval: Interval!, limit: Int = 30): [Candle!]!
+}
+
+type Instrument {
+  symbol: String!
+  name: String!
+  exchange: Exchange!
+  currency: Currency!
+}
+
+type Quote {
+  symbol: String!
+  "Last traded price, in major units of the currency."
+  price: Float!
+  currency: Currency!
+  volume: Int!
+  timestamp: String!
+}
+
+type Candle {
+  t: String!
+  o: Float!
+  h: Float!
+  l: Float!
+  c: Float!
+  v: Int!
+}
+
+enum Interval {
+  MIN1
+  HOUR1
+  DAY1
+}
+
+enum Exchange {
+  XTLN
+  XORB
+}
+
+enum Currency {
+  USD
+  EUR
+}

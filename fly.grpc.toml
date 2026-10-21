@@ -1,0 +1,29 @@
+# gRPC (tickerline.marketdata.v1 and v2): tickerline-grpc.fly.dev:443. Fly terminates TLS
+# and forwards HTTP/2 cleartext to the server.
+app = "tickerline-grpc"
+primary_region = "cdg"
+
+[build]
+
+[env]
+  PORT = "50051"
+
+[experimental]
+  cmd = ["node", "--experimental-strip-types", "src/grpc.ts"]
+
+[[services]]
+  internal_port = 50051
+  protocol = "tcp"
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls"]
+    [services.ports.tls_options]
+      alpn = ["h2"]
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

@@ -1,0 +1,53 @@
+# biject in the provider's CI.
+name: biject
+on:
+  pull_request:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write   # GitHub Actions OIDC: authenticates uploads and signs keylessly
+
+env:
+  BIJECT_URL: https://biject.example.com
+
+jobs:
+  # Specs committed as files are read by biject directly; this step only matters for APIs
+  # whose spec is generated (generate:) or served by a deployment (staging_url:).
+  extract:
+    if: github.event_name != 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: samirovsky/biject/actions/extract@v0.1.0
+        with:
+          server: ${{ env.BIJECT_URL }}
+
+  # After a signing PR merges: sign the statements it committed to .biject/sign/.
+  sign-statements:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: samirovsky/biject/actions/sign@v0.1.0
+        with:
+          server: ${{ env.BIJECT_URL }}
+          what: statements
+
+  # On a release: sign the released api.lock.
+  sign-lock:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+      - uses: samirovsky/biject/actions/sign@v0.1.0
+        with:
+          server: ${{ env.BIJECT_URL }}
+          what: lock
+          lock: api.lock.yaml

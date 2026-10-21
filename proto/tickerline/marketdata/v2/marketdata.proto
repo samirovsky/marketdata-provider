@@ -1,0 +1,69 @@
+// Tickerline market data, gRPC, version 2.
+syntax = "proto3";
+
+package tickerline.marketdata.v2;
+
+import "google/protobuf/timestamp.proto";
+import "api_lock.proto";
+
+option go_package = "github.com/samirovsky/tickerline-api/gen/go/tickerline/marketdata/v2;marketdatav2";
+option java_package = "com.tickerline.marketdata.v2";
+option java_multiple_files = true;
+
+// Quotes and candles. Authenticate with the `x-tickerline-key` metadata entry.
+service MarketData {
+  // The latest quote of an instrument.
+  rpc FetchQuote(FetchQuoteRequest) returns (Quote) {
+    option (api_lock.renamed_from) = "tickerline.marketdata.v1.MarketData.GetQuote";
+  }
+  // OHLCV candles, oldest first.
+  rpc ListCandles(ListCandlesRequest) returns (ListCandlesResponse);
+  // A quote every few seconds until the client cancels.
+  rpc StreamQuotes(StreamQuotesRequest) returns (stream Quote);
+}
+
+message FetchQuoteRequest {
+  option (api_lock.message_renamed_from) = "tickerline.marketdata.v1.GetQuoteRequest";
+  string symbol = 1;
+}
+
+message StreamQuotesRequest {
+  repeated string symbols = 1;
+}
+
+message Quote {
+  string symbol = 1;
+  // Last traded price, in major units of the currency.
+  double last = 2;
+  string currency = 3;
+  // Shares traded today.
+  int64 volume = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+enum Interval {
+  INTERVAL_UNSPECIFIED = 0;
+  INTERVAL_1M = 1;
+  INTERVAL_1H = 2;
+  INTERVAL_1D = 3;
+  INTERVAL_1W = 4;
+}
+
+message ListCandlesRequest {
+  string symbol = 1;
+  Interval interval = 2;
+  int32 count = 3;
+}
+
+message Candle {
+  google.protobuf.Timestamp t = 1;
+  double o = 2;
+  double h = 3;
+  double l = 4;
+  double c = 5;
+  int64 v = 6;
+}
+
+message ListCandlesResponse {
+  repeated Candle candles = 1;
+}

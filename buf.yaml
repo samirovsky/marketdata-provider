@@ -1,0 +1,7 @@
+# `buf build -o build/api.binpb` writes the descriptor set biject compiles the gRPC lock
+# from (imports and source info included).
+version: v2
+modules:
+  - path: proto
+    excludes: [proto/third_party]
+  - path: proto/third_party
