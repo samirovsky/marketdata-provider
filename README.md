@@ -1,5 +1,12 @@
 # Tickerline market data (sample provider)
 
+[![ci](https://github.com/samirovsky/marketdata-provider/actions/workflows/ci.yml/badge.svg)](https://github.com/samirovsky/marketdata-provider/actions/workflows/ci.yml)
+[![migrate with biject](https://biject.fly.dev/badge/samirovsky/tickerline-marketdata.svg)](https://biject.fly.dev/migrate/samirovsky/tickerline-marketdata)
+
+**Calling this API from your code?** Click **migrate with biject**: install biject's GitHub
+App on your organization, pick your repositories, and biject adds its GitHub Action to each
+one that calls the API and migrates it to the latest version, verified in your own CI.
+
 A fictional market data provider serving one API over three protocols, set up for
 [biject](https://github.com/samirovsky/biject). Prices are synthetic and deterministic.
 
