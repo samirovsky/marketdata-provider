@@ -1,7 +1,7 @@
 # Tickerline market data (sample provider)
 
 [![ci](https://github.com/samirovsky/marketdata-provider/actions/workflows/ci.yml/badge.svg)](https://github.com/samirovsky/marketdata-provider/actions/workflows/ci.yml)
-[![migrate with biject](https://biject.fly.dev/badge/samirovsky/tickerline-marketdata.svg)](https://biject.fly.dev/migrate/samirovsky/tickerline-marketdata)
+[![migrate with biject](https://biject-demo.fly.dev/badge/samirovsky/tickerline-marketdata.svg)](https://biject-demo.fly.dev/migrate/samirovsky/tickerline-marketdata)
 
 **Calling this API from your code?** Click **migrate with biject**: install biject's GitHub
 App on your organization, pick your repositories, and biject adds its GitHub Action to each
