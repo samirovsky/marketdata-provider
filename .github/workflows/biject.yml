@@ -12,7 +12,7 @@ permissions:
   id-token: write   # GitHub Actions OIDC: authenticates uploads and signs keylessly
 
 env:
-  BIJECT_URL: https://biject.example.com
+  BIJECT_URL: https://biject-demo.fly.dev
 
 jobs:
   # Specs committed as files are read by biject directly; this step only matters for APIs
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: samirovsky/biject/actions/extract@v0.1.0
+      - uses: samirovsky/biject-actions/extract@v0.1.0
         with:
           server: ${{ env.BIJECT_URL }}
 
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: samirovsky/biject/actions/sign@v0.1.0
+      - uses: samirovsky/biject-actions/sign@v0.1.0
         with:
           server: ${{ env.BIJECT_URL }}
           what: statements
@@ -46,7 +46,7 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
-      - uses: samirovsky/biject/actions/sign@v0.1.0
+      - uses: samirovsky/biject-actions/sign@v0.1.0
         with:
           server: ${{ env.BIJECT_URL }}
           what: lock
