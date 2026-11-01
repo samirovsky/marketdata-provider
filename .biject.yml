@@ -7,19 +7,19 @@
 apis:
   - name: tickerline-marketdata
     protocol: http
-    specs: [openapi/v1.yaml]
+    specs: [openapi/v2.yaml]
     versioning: { style: path, path_template: "/{version}" }
   - name: tickerline-marketdata
     protocol: graphql
-    specs: [graphql/v1.graphql]
-    version: v1
+    specs: [graphql/v2.graphql]
+    version: v2
     versioning: { style: path, path_template: "/api/{version}/graphql" }
     # A schema names no server: clients call this host.
     servers: ["https://tickerline-api.fly.dev"]
   - name: tickerline-marketdata
     protocol: grpc
     # Written by `npm run descriptors` (buf); the workflow checks it is current.
-    specs: [build/v1.binpb]
+    specs: [build/v2.binpb]
     versioning: { style: package, package_segment: "v*" }
     # Protobuf can't declare credentials: the metadata key that carries the API key.
     metadata_auth: [{ key: x-tickerline-key }]
