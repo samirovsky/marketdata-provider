@@ -37,7 +37,7 @@ jobs:
           server: ${{ env.BIJECT_URL }}
           what: statements
 
-  # On a release: sign the released api.lock.
+  # On a release: sign the released REST lock (the one .biject.yml names).
   sign-lock:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
@@ -50,4 +50,4 @@ jobs:
         with:
           server: ${{ env.BIJECT_URL }}
           what: lock
-          lock: api.lock.yaml
+          lock: api.lock.http.yaml
