@@ -1,0 +1,27 @@
+{
+  "spec": "api-migrations-trust/0.2",
+  "version": 1,
+  "provider": "Samir Tabib",
+  "apis": [
+    "marketdata"
+  ],
+  "signers": [
+    {
+      "id": "release-ci",
+      "issuer": "https://token.actions.githubusercontent.com",
+      "subject_glob": "https://github.com/samirovsky/marketdata-provider/.github/workflows/biject.yml@*"
+    },
+    {
+      "id": "maintainer",
+      "issuer": "https://github.com/login/oauth",
+      "subject": "tbib.samir@gmail.com"
+    }
+  ],
+  "threshold": {
+    "lock": 1,
+    "package": 2,
+    "revocation": 1,
+    "policy": 2
+  },
+  "expires": "2027-11-01T00:00:00Z"
+}
