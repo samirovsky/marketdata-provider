@@ -7,7 +7,7 @@
 apis:
   - name: marketdata
     protocol: http
-    specs: [openapi/v1.yaml]
+    specs: [openapi/v2.yaml]
     lock: api.lock.http.yaml
     versioning: { style: path, path_template: "/{version}" }
 gate: release
