@@ -1,4 +1,4 @@
-# One image, two Fly apps: REST + GraphQL (fly.toml) and gRPC (fly.grpc.toml).
+# The Market Data API (REST + GraphQL + trust policy), the Vercel container project marketdata-api.
 FROM node:22-slim
 WORKDIR /app
 ENV NODE_ENV=production

@@ -2,7 +2,7 @@
   "name": "marketdata-provider",
   "private": true,
   "type": "module",
-  "description": "Tickerline market data: one service, three protocols (REST, GraphQL, gRPC).",
+  "description": "Market Data: one service, three protocols (REST, GraphQL, gRPC).",
   "scripts": {
     "start": "node --experimental-strip-types src/server.ts",
     "grpc": "node --experimental-strip-types src/grpc.ts",

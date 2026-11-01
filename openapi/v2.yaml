@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Tickerline Market Data
+  title: Market Data
   version: v2
-  description: Quotes, candles and instruments for Tickerline-listed securities.
+  description: Quotes, candles and instruments for listed securities.
 servers:
-  - url: https://tickerline-api.fly.dev/v2
+  - url: https://marketdata-api.vercel.app/v2
 security:
   - apiKey: []
 paths:
@@ -60,7 +60,7 @@ paths:
         - name: account
           in: query
           required: true
-          description: The Tickerline account FX usage is metered against (new in v2).
+          description: The Market Data account FX usage is metered against (new in v2).
           schema: { type: string, example: acct_demo }
       responses:
         "200":
@@ -72,7 +72,7 @@ paths:
           description: Unknown pair
 components:
   securitySchemes:
-    apiKey: { type: apiKey, in: header, name: X-Tickerline-Key }
+    apiKey: { type: apiKey, in: header, name: X-Marketdata-Key }
   schemas:
     Instrument:
       type: object

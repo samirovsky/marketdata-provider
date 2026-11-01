@@ -5,7 +5,7 @@ import * as loader from "@grpc/proto-loader";
 import { app } from "./server.ts";
 import { server } from "./grpc.ts";
 
-const KEY = { "x-tickerline-key": "demo" };
+const KEY = { "x-marketdata-key": "demo" };
 const get = (path: string, headers: Record<string, string> = KEY) => app().request(path, { headers });
 const gql = (version: string, query: string, variables = {}) =>
   app().request(`/api/${version}/graphql`, { method: "POST", headers: { ...KEY, "content-type": "application/json" }, body: JSON.stringify({ query, variables }) });
@@ -78,4 +78,37 @@ test("gRPC v1 and v2 answer on one server", async () => {
   } finally {
     s.forceShutdown();
   }
+});
+
+test("the trust policy and its signatures are served from this host", async () => {
+  const policy = JSON.stringify({ spec: "api-migrations-trust/0.2", version: 1, provider: "Market Data", apis: ["marketdata"] });
+  let published = false;
+  const calls: string[] = [];
+  const fake = (async (url: string | URL) => {
+    const u = String(url);
+    calls.push(u);
+    if (u.startsWith("https://raw.githubusercontent.com/")) return published ? new Response(policy) : new Response("404: Not Found", { status: 404 });
+    if (u.startsWith("https://biject.example/api/public/policy-bundles")) return new Response(JSON.stringify([{ bundle: 1 }, { bundle: 2 }]));
+    throw new Error(`unexpected ${u}`);
+  }) as typeof fetch;
+  const cfg = { repo: "acme/marketdata-provider", branch: "main", bijectUrl: "https://biject.example", fetch: fake, cacheMs: 0 };
+  const a = app(cfg);
+  // Before the policy PR merges: nothing to serve.
+  assert.equal((await a.request("/.well-known/api-migrations-trust.json")).status, 404);
+  assert.equal((await a.request("/.well-known/api-migrations-trust.json.sigstore.json")).status, 404);
+  published = true;
+  const p = await a.request("/.well-known/api-migrations-trust.json");
+  assert.equal(p.status, 200);
+  assert.equal(await p.text(), policy, "byte for byte: the signatures cover these bytes' policy");
+  assert.ok(calls.includes("https://raw.githubusercontent.com/acme/marketdata-provider/main/trust/.well-known/api-migrations-trust.json"));
+  const b = await a.request("/.well-known/api-migrations-trust.json.sigstore.json");
+  assert.equal(b.status, 200);
+  assert.equal((await b.json()).length, 2);
+  assert.ok(calls.includes("https://biject.example/api/public/policy-bundles?api=marketdata&version=1"));
+  // Cached: a second read within the cache window doesn't fetch again.
+  const cachedApp = app({ ...cfg, cacheMs: 60_000 });
+  await cachedApp.request("/.well-known/api-migrations-trust.json");
+  const before = calls.length;
+  await cachedApp.request("/.well-known/api-migrations-trust.json");
+  assert.equal(calls.length, before);
 });

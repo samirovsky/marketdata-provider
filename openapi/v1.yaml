@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
-  title: Tickerline Market Data
+  title: Market Data
   version: v1
-  description: Quotes, candles and instruments for Tickerline-listed securities.
+  description: Quotes, candles and instruments for listed securities.
 servers:
-  - url: https://tickerline-api.fly.dev/v1
+  - url: https://marketdata-api.vercel.app/v1
 security:
   - apiKey: []
 paths:
@@ -66,7 +66,7 @@ paths:
           description: Unknown pair
 components:
   securitySchemes:
-    apiKey: { type: apiKey, in: header, name: X-Tickerline-Key }
+    apiKey: { type: apiKey, in: header, name: X-Marketdata-Key }
   schemas:
     Instrument:
       type: object

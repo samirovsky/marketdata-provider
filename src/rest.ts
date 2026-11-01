@@ -12,8 +12,8 @@ export function requireKey(header: string | undefined): boolean {
 
 export function rest(): Hono {
   const app = new Hono();
-  app.use("/v1/*", async (c, next) => (requireKey(c.req.header("x-tickerline-key")) ? next() : c.json({ error: "missing X-Tickerline-Key" }, 401)));
-  app.use("/v2/*", async (c, next) => (requireKey(c.req.header("x-tickerline-key")) ? next() : c.json({ error: "missing X-Tickerline-Key" }, 401)));
+  app.use("/v1/*", async (c, next) => (requireKey(c.req.header("x-marketdata-key")) ? next() : c.json({ error: "missing X-Marketdata-Key" }, 401)));
+  app.use("/v2/*", async (c, next) => (requireKey(c.req.header("x-marketdata-key")) ? next() : c.json({ error: "missing X-Marketdata-Key" }, 401)));
 
   for (const v of ["v1", "v2"]) {
     app.get(`/${v}/instruments`, (c) => c.json(INSTRUMENTS));
@@ -46,7 +46,7 @@ export function rest(): Hono {
     const r = fxRate(c.req.param("pair"));
     return r ? c.json(r) : c.json({ error: "unknown pair" }, 404);
   });
-  // v2 meters FX usage per account: every call names the caller's Tickerline account.
+  // v2 meters FX usage per account: every call names the caller's Market Data account.
   app.get("/v2/fx/:pair", (c) => {
     if (!c.req.query("account")?.trim()) return c.json({ error: "account is required" }, 400);
     const r = fxRate(c.req.param("pair"));
