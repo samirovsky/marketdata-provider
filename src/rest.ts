@@ -1,6 +1,6 @@
 // REST, versions 1 and 2, served side by side during the migration window.
 import { Hono } from "hono";
-import { candles, INSTRUMENTS, quote, type Interval } from "./data.ts";
+import { candles, fxRate, INSTRUMENTS, quote, type Interval } from "./data.ts";
 
 const V1_INTERVALS: Interval[] = ["1m", "1h", "1d"];
 const V2_INTERVALS: Interval[] = ["1m", "1h", "1d", "1w"];
@@ -40,6 +40,17 @@ export function rest(): Hono {
     if (!V2_INTERVALS.includes(interval)) return c.json({ error: "interval must be 1m, 1h, 1d or 1w" }, 400);
     const out = candles(c.req.param("symbol"), interval, Number(c.req.query("limit") ?? 30));
     return out ? c.json(out) : c.json({ error: "unknown symbol" }, 404);
+  });
+
+  app.get("/v1/fx/:pair", (c) => {
+    const r = fxRate(c.req.param("pair"));
+    return r ? c.json(r) : c.json({ error: "unknown pair" }, 404);
+  });
+  // v2 meters FX usage per account: every call names the caller's Tickerline account.
+  app.get("/v2/fx/:pair", (c) => {
+    if (!c.req.query("account")?.trim()) return c.json({ error: "account is required" }, 400);
+    const r = fxRate(c.req.param("pair"));
+    return r ? c.json(r) : c.json({ error: "unknown pair" }, 404);
   });
   return app;
 }

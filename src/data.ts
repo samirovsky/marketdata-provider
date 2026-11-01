@@ -82,3 +82,21 @@ export function candles(symbol: string, interval: Interval, limit: number, now =
   }
   return out;
 }
+
+export interface FxRate {
+  pair: string;
+  rate: number;
+  as_of: string;
+}
+
+const FX_BASE: Record<string, number> = { USDEUR: 0.9213, EURUSD: 1.0854 };
+
+/** The latest rate of a currency pair (`USDEUR`, `EURUSD`, or a currency to itself). */
+export function fxRate(pair: string, now = Date.now()): FxRate | undefined {
+  const p = pair.toUpperCase();
+  const base = p.length === 6 && p.slice(0, 3) === p.slice(3) ? 1 : FX_BASE[p];
+  if (base === undefined) return undefined;
+  const minute = Math.floor(now / 60_000);
+  const rate = base === 1 ? 1 : Math.round(base * (1 + Math.sin(minute / 29) * 0.002) * 10_000) / 10_000;
+  return { pair: p, rate, as_of: new Date(minute * 60_000).toISOString() };
+}

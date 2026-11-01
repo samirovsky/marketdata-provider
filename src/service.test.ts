@@ -29,6 +29,17 @@ test("REST v1 and v2 serve the same data in their own shapes", async () => {
   assert.equal((await get("/v1/candles/ORBT?interval=1w")).status, 400, "1w is new in v2");
 });
 
+test("REST v2 FX rates need an account", async () => {
+  const v1 = await (await get("/v1/fx/USDEUR")).json();
+  assert.equal(v1.pair, "USDEUR");
+  assert.equal(typeof v1.rate, "number");
+  assert.equal((await get("/v2/fx/USDEUR")).status, 400);
+  const v2 = await (await get("/v2/fx/usdeur?account=acct_demo")).json();
+  assert.equal(v2.rate, v1.rate);
+  assert.equal((await (await get("/v1/fx/EUREUR")).json()).rate, 1);
+  assert.equal((await get("/v1/fx/GBPJPY")).status, 404);
+});
+
 test("GraphQL v1 and v2 follow their schemas", async () => {
   const v1 = await (await gql("v1", "query($s: String!) { quote(symbol: $s) { price currency } candles(symbol: $s, interval: MIN1, limit: 2) { c } }", { s: "KELP" })).json();
   assert.equal(v1.errors, undefined, JSON.stringify(v1.errors));

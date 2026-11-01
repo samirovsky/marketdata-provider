@@ -50,6 +50,20 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/Candle" }
+  /fx/{pair}:
+    get:
+      operationId: getFxRate
+      summary: The latest exchange rate of a currency pair, e.g. USDEUR.
+      parameters:
+        - { name: pair, in: path, required: true, schema: { type: string, example: USDEUR } }
+      responses:
+        "200":
+          description: The rate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FxRate" }
+        "404":
+          description: Unknown pair
 components:
   securitySchemes:
     apiKey: { type: apiKey, in: header, name: X-Tickerline-Key }
@@ -71,6 +85,13 @@ components:
         currency: { type: string, enum: [USD, EUR] }
         volume: { type: integer, description: Shares traded today. }
         timestamp: { type: string, format: date-time }
+    FxRate:
+      type: object
+      required: [pair, rate, as_of]
+      properties:
+        pair: { type: string, example: USDEUR }
+        rate: { type: number, description: Units of the quote currency per unit of the base currency. }
+        as_of: { type: string, format: date-time }
     Candle:
       type: object
       required: [t, o, h, l, c, v]

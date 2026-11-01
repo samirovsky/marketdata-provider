@@ -51,6 +51,25 @@ paths:
               schema:
                 type: array
                 items: { $ref: "#/components/schemas/Candle" }
+  /fx/{pair}:
+    get:
+      operationId: getFxRate
+      summary: The latest exchange rate of a currency pair, e.g. USDEUR.
+      parameters:
+        - { name: pair, in: path, required: true, schema: { type: string, example: USDEUR } }
+        - name: account
+          in: query
+          required: true
+          description: The Tickerline account FX usage is metered against (new in v2).
+          schema: { type: string, example: acct_demo }
+      responses:
+        "200":
+          description: The rate
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FxRate" }
+        "404":
+          description: Unknown pair
 components:
   securitySchemes:
     apiKey: { type: apiKey, in: header, name: X-Tickerline-Key }
@@ -78,6 +97,13 @@ components:
           type: string
           format: date-time
           x-api-lock-renamed-from: timestamp
+    FxRate:
+      type: object
+      required: [pair, rate, as_of]
+      properties:
+        pair: { type: string, example: USDEUR }
+        rate: { type: number, description: Units of the quote currency per unit of the base currency. }
+        as_of: { type: string, format: date-time }
     Candle:
       type: object
       required: [t, o, h, l, c, v]

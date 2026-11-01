@@ -2,7 +2,7 @@ lock: 1
 api: "tickerline-marketdata"
 protocol: "http"
 version: "v1"
-hash: "sha256:3a95bfc9b9cebb34c76e32d15c51d92053aa2f87fd26c404fdb15ade7cb47018"
+hash: "sha256:1a6a6507485cba3131807562b0fda22e14ffc175c08813436d5d0ab71ef40372"
 versioning:
   path_template: "/{version}"
   style: "path"
@@ -11,7 +11,7 @@ source:
     - "openapi/v1.yaml"
   generator: "file"
   input_hashes:
-    "openapi/v1.yaml": "sha256:13cecbbe9f5d19be33aac8e659a53b33e22146c5991c558839186e4ebb2e9adb"
+    "openapi/v1.yaml": "sha256:eb442682ce88712048fc15c77cb426dd617392377bbf7e1cde730bf28881755c"
 servers:
   - url: "https://tickerline-api.fly.dev/v1"
 auth:
@@ -91,6 +91,31 @@ operations:
             ref: "s_1508"
             type: "object"
           type: "array"
+        since: "v1"
+    since: "v1"
+  op_7e16:
+    auth:
+      - a_bef9: []
+    method: "GET"
+    params:
+      p_396f:
+        in: "path"
+        name: "pair"
+        required: true
+        since: "v1"
+        type: "string"
+    path: "/fx/{pair}"
+    responses:
+      "200":
+        id: "r_aed8"
+        media_types:
+          - "application/json"
+        shape:
+          ref: "s_fcb0"
+          type: "object"
+        since: "v1"
+      "404":
+        id: "r_77b1"
         since: "v1"
     since: "v1"
   op_f4b8:
@@ -224,12 +249,37 @@ schemas:
     kind: "object"
     name: "Quote"
     since: "v1"
+  s_fcb0:
+    fields:
+      f_2fe3:
+        name: "rate"
+        required: true
+        since: "v1"
+        type: "number"
+      f_4626:
+        format: "date-time"
+        name: "as_of"
+        required: true
+        since: "v1"
+        type: "string"
+      f_71ac:
+        name: "pair"
+        required: true
+        since: "v1"
+        type: "string"
+    kind: "object"
+    name: "FxRate"
+    since: "v1"
 events: {}
 docs:
   api:
     description: "Quotes, candles and instruments for Tickerline-listed securities."
     extensions:
       title: "Tickerline Market Data"
+  f_2fe3:
+    description: "Units of the quote currency per unit of the base currency."
+  f_71ac:
+    example: "USDEUR"
   f_7736:
     example: "TLX"
   f_802f:
@@ -246,15 +296,23 @@ docs:
     extensions:
       operationId: "listCandles"
     summary: "OHLCV candles, oldest first."
+  op_7e16:
+    extensions:
+      operationId: "getFxRate"
+    summary: "The latest exchange rate of a currency pair, e.g. USDEUR."
   op_f4b8:
     extensions:
       operationId: "listInstruments"
     summary: "Every listed instrument."
   r_4dd3:
     description: "Unknown symbol"
+  r_77b1:
+    description: "Unknown pair"
   r_80a1:
     description: "The quote"
   r_9ec6:
     description: "The instruments"
   r_a8a8:
     description: "The candles"
+  r_aed8:
+    description: "The rate"
