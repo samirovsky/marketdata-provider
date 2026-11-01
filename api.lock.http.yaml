@@ -1,19 +1,19 @@
 lock: 1
 api: "marketdata"
 protocol: "http"
-version: "v1"
-hash: "sha256:963375e928611d66463531085026b746ffa191ffdaeac76e13437b6e887d0f80"
+version: "v2"
+hash: "sha256:d90680892e7d8f1688389bfe2f203a6cf770408795e69d7191366964f4fbaab7"
 versioning:
   path_template: "/{version}"
   style: "path"
 source:
   files:
-    - "openapi/v1.yaml"
+    - "openapi/v2.yaml"
   generator: "file"
   input_hashes:
-    "openapi/v1.yaml": "sha256:8d823d870c28261466955a0ab6f402a1a1ba929d545d17a6abfb6e7db9a197c0"
+    "openapi/v2.yaml": "sha256:78cbfe08661dc520155b271ec804a039a34e404d44cd07d1e7c89bbe7effde76"
 servers:
-  - url: "https://marketdata-api.vercel.app/v1"
+  - url: "https://marketdata-api.vercel.app/v2"
 auth:
   a_bef9:
     in: "header"
@@ -67,6 +67,9 @@ operations:
           v_a493:
             name: "1h"
             since: "v1"
+          v_a68c:
+            name: "1w"
+            since: "v2"
       p_8fcc:
         in: "path"
         name: "symbol"
@@ -80,7 +83,8 @@ operations:
         name: "limit"
         since: "v1"
         type: "integer"
-    path: "/candles/{symbol}"
+    path: "/instruments/{symbol}/candles"
+    renamed_from: "GET /candles/{symbol}"
     responses:
       "200":
         id: "r_a8a8"
@@ -103,6 +107,12 @@ operations:
         name: "pair"
         required: true
         since: "v1"
+        type: "string"
+      p_de59:
+        in: "query"
+        name: "account"
+        required: true
+        since: "v2"
         type: "string"
     path: "/fx/{pair}"
     responses:
@@ -231,13 +241,15 @@ schemas:
         since: "v1"
         type: "string"
       f_802f:
-        name: "price"
+        name: "last"
+        renamed_from: "price"
         required: true
         since: "v1"
         type: "number"
       f_bd83:
         format: "date-time"
-        name: "timestamp"
+        name: "as_of"
+        renamed_from: "timestamp"
         required: true
         since: "v1"
         type: "string"
@@ -283,7 +295,7 @@ docs:
   f_7736:
     example: "TLX"
   f_802f:
-    description: "Last traded price"
+    description: "Last traded price, in major units of the currency."
   f_d4bb:
     description: "Shares traded today."
   f_e730:
@@ -304,6 +316,8 @@ docs:
     extensions:
       operationId: "listInstruments"
     summary: "Every listed instrument."
+  p_de59:
+    description: "The Market Data account FX usage is metered against (new in v2)."
   r_4dd3:
     description: "Unknown symbol"
   r_77b1:
