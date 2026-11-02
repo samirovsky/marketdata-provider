@@ -1,6 +1,6 @@
 {
   "spec": "api-migrations-trust/0.2",
-  "version": 1,
+  "version": 2,
   "provider": "Samir Tabib",
   "apis": [
     "marketdata"
